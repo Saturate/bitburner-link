@@ -29,7 +29,7 @@ Options
 
 While running, type: pull [files], push, ram [filter], help, quit
 
-In the game: Options > Remote API, set the port, press Connect.
+In the game: Options > Remote API, set the port, leave "Use wss" unchecked, press Connect.
 Settings are read from filesync.json (if you used bitburner-filesync), then ${CONFIG_FILE}, then flags.
 `;
 
@@ -100,7 +100,7 @@ async function main() {
 	});
 	await new Promise<void>((r) => game.once("listening", r));
 	log.info(`${c.bold("bitburner-link")} ${version()} on port ${cfg.port}, syncing ${c.dim(cfg.dir)}${cfg.dryRun ? c.yellow(" (dry run)") : ""}`);
-	log.info(c.dim(`waiting for the game: Options > Remote API, port ${cfg.port}, Connect`));
+	log.info(c.dim(`waiting for the game: Options > Remote API, port ${cfg.port}, "Use wss" off, Connect`));
 
 	// One-shot commands: wait for the game, do it, exit.
 	if (command === "pull" || command === "ram") {

@@ -29,7 +29,7 @@ Saves that don't change anything (format on save, `touch`) aren't pushed again. 
 npx bitburner-link
 ```
 
-In the game: **Options > Remote API**, enter the port (12525 by default) and press **Connect**. The game reconnects to the same port when you reload it.
+In the game: **Options > Remote API**, enter the port (12525 by default), leave **Use wss** unchecked and press **Connect**. The game reconnects to the same port when you reload it.
 
 To keep it in a project:
 
