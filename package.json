@@ -21,6 +21,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"prepublishOnly": "npm test",
 		"start": "node dist/src/cli.js",
 		"test": "tsc && node --test \"dist/test/**/*.test.js\""
 	},
