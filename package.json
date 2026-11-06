@@ -5,6 +5,12 @@
 	"keywords": ["bitburner", "filesync", "remote-api", "netscript"],
 	"license": "MIT",
 	"author": "Allan Kimmer Jensen",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Saturate/bitburner-link.git"
+	},
+	"homepage": "https://github.com/Saturate/bitburner-link#readme",
+	"bugs": "https://github.com/Saturate/bitburner-link/issues",
 	"type": "module",
 	"bin": {
 		"bitburner-link": "dist/src/cli.js"
