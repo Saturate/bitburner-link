@@ -94,6 +94,8 @@ On the first connect every script is measured once with the game's `calculateRam
 
 The game charges RAM for what a script could call, so the numbers match what `mem` shows in the terminal.
 
+One game quirk is handled for you: the game caches each script's RAM and only recomputes it when that script's own content changes. After you edit a library, its importers keep reporting their old cost, in `mem` too, until they are saved again. bitburner-link writes each affected importer once with an extra newline and then back as it was, so the game recomputes it and the numbers you see are current.
+
 ## Requirements
 
 Node.js 20 or newer, and a Bitburner version with the Remote API. Tested with Bitburner 3.x.

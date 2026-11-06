@@ -191,6 +191,15 @@ export class Link {
 		let measured = 0;
 		for (const f of targets) {
 			try {
+				// The game caches each script's RAM and only drops it when that script's content
+				// changes, so a script affected through an import would report its old cost.
+				// Writing it with an extra newline and then back as it was makes it recompute
+				// (an identical write is ignored).
+				const content = this.remote.get(f);
+				if (!direct.has(f) && content !== undefined && !opts.quiet) {
+					await this.game.pushFile(f, content + "\n", this.cfg.server);
+					await this.game.pushFile(f, content, this.cfg.server);
+				}
 				const ram = await this.game.calculateRam(f, this.cfg.server);
 				const before = this.ram.get(f);
 				this.ram.set(f, ram);

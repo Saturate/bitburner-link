@@ -8,6 +8,9 @@ export class FakeGame {
 	files = new Map<string, string>();
 	calls: { method: string; params: Record<string, unknown> }[] = [];
 	definitions = "declare interface NS {}\n";
+	// The game caches each script's RAM and drops it only when that script is written,
+	// so an importer keeps its old cost after a library changes.
+	private ramCache = new Map<string, number>();
 	private ws: WebSocket | null = null;
 
 	constructor(initial: Record<string, string> = {}) {
@@ -41,9 +44,14 @@ export class FakeGame {
 			case "getAllFiles":
 				// The game reports nested files with a leading slash too.
 				return reply([...this.files].map(([filename, content]) => ({ filename: filename.includes("/") ? `/${filename}` : filename, content })));
-			case "pushFile":
+			case "pushFile": {
+				// Like the game: only a real content change drops that file's cached RAM, and
+				// never its importers'.
+				const changed = this.files.get(key) !== String(p.content);
 				this.files.set(key, String(p.content));
+				if (changed) this.ramCache.delete(key);
 				return reply("OK");
+			}
 			case "getFile":
 				return this.files.has(key) ? reply(this.files.get(key)) : fail("file not found");
 			case "deleteFile":
@@ -53,7 +61,8 @@ export class FakeGame {
 			case "calculateRam": {
 				if (!this.files.has(key)) return fail("file not found");
 				if (this.files.get(key)!.includes("SYNTAX ERROR")) return fail("SyntaxError: Unexpected token");
-				return reply(this.ram(key, new Set()));
+				if (!this.ramCache.has(key)) this.ramCache.set(key, this.ram(key, new Set()));
+				return reply(this.ramCache.get(key));
 			}
 			default:
 				return fail(`unknown method ${msg.method}`);
